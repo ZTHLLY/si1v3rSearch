@@ -8,6 +8,7 @@
       @search="onSearch"
     />
     {{ JSON.stringify(searchParams) }}
+    {{ JSON.stringify(postDetail) }}
     <Mydivider />
     <a-tabs v-model:activeKey="activeKey" @change="handleTabChange">
       <a-tab-pane key="post" tab="文章">
@@ -31,6 +32,14 @@ import UserList from "../components/UserList.vue";
 import Mydivider from "../components/MyDivider.vue";
 import router from "@/router";
 import { useRoute } from "vue-router";
+import myAxios from "../plugins/myAxios";
+
+const postDetail = ref("");
+
+myAxios.get("/post/get/vo?id=" + "1783443264557342722").then((res: any) => {
+  console.log(res.content);
+  postDetail.value = res.content;
+});
 
 const route = useRoute();
 const activeKey = route.params.category;
