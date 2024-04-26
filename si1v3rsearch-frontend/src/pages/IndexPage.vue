@@ -7,18 +7,18 @@
       size="large"
       @search="onSearch"
     />
-    {{ JSON.stringify(searchParams) }}
-    {{ JSON.stringify(postDetail) }}
+    <!-- {{ JSON.stringify(searchParams) }}
+    {{ JSON.stringify(userList) }} -->
     <Mydivider />
     <a-tabs v-model:activeKey="activeKey" @change="handleTabChange">
       <a-tab-pane key="post" tab="文章">
-        <PostList />
+        <PostList :post-list="postList" />
       </a-tab-pane>
       <a-tab-pane key="picture" tab="图片">
         <PictureList />
       </a-tab-pane>
       <a-tab-pane key="user" tab="用户">
-        <UserList />
+        <UserList :user-list="userList" />
       </a-tab-pane>
     </a-tabs>
   </div>
@@ -34,11 +34,17 @@ import router from "@/router";
 import { useRoute } from "vue-router";
 import myAxios from "../plugins/myAxios";
 
-const postDetail = ref("");
+const postList = ref([]);
+const userList = ref([]);
 
-myAxios.get("/post/get/vo?id=" + "1783443264557342722").then((res: any) => {
-  console.log(res.content);
-  postDetail.value = res.content;
+myAxios.post("/post/list/page/vo", {}).then((res: any) => {
+  console.log(res);
+  postList.value = res.records;
+});
+
+myAxios.post("/user/list/page/vo", {}).then((res: any) => {
+  console.log(res);
+  userList.value = res.records;
 });
 
 const route = useRoute();
