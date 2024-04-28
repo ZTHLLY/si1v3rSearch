@@ -7,6 +7,7 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 
+import com.yupi.springbootinit.model.entity.Picture;
 import com.yupi.springbootinit.model.entity.Post;
 import com.yupi.springbootinit.service.PostService;
 import org.jsoup.Jsoup;
@@ -32,6 +33,8 @@ public class crawlerTest {
     @Test
     void crawlImg() throws IOException {
 
+        List<Picture> pictureList = new ArrayList<>();
+
         String url = "https://www.bing.com/images/search?q=星穹铁道黄泉&first=1";
         Document doc = Jsoup.connect(url).get();
         System.out.println(doc);
@@ -43,9 +46,14 @@ public class crawlerTest {
             String murl= map.get("murl");
             //图片标题
             String title=element.select(".inflnk").get(0).attr("aria-label");
-            System.out.println(title);
+            Picture picture = new Picture();
+            picture.setTitle(title);
+            picture.setImgUrl(murl);
+            pictureList.add(picture);
+            //System.out.println(title);
             //System.out.println(murl);
         }
+        System.out.println(pictureList);
     }
 
     @Test
