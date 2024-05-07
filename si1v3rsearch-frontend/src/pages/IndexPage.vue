@@ -15,7 +15,7 @@
         <PostList :post-list="postList" />
       </a-tab-pane>
       <a-tab-pane key="picture" tab="图片">
-        <PictureList />
+        <PictureList :picture-list="pictureList" />
       </a-tab-pane>
       <a-tab-pane key="user" tab="用户">
         <UserList :user-list="userList" />
@@ -36,6 +36,7 @@ import myAxios from "../plugins/myAxios";
 
 const postList = ref([]);
 const userList = ref([]);
+const pictureList = ref([]);
 
 myAxios.post("/post/list/page/vo", {}).then((res: any) => {
   console.log(res);
@@ -55,6 +56,11 @@ const initSearchParams = {
   pageNum: 1,
 };
 const searchParams = ref(initSearchParams);
+
+myAxios.post("/picture/list/page/vo", searchParams).then((res: any) => {
+  console.log(res);
+  pictureList.value = res.records;
+});
 
 watchEffect(() => {
   searchParams.value = {

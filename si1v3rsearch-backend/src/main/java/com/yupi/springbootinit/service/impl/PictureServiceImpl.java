@@ -48,7 +48,7 @@ public class PictureServiceImpl implements PictureService {
             picture.setImgUrl(murl);
             pictureList.add(picture);
 
-            if(pictureList.size()>=pageNum){
+            if(pictureList.size()>=current){
                 break;
             }
 
