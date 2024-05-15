@@ -38,16 +38,6 @@ const postList = ref([]);
 const userList = ref([]);
 const pictureList = ref([]);
 
-myAxios.post("/post/list/page/vo", {}).then((res: any) => {
-  console.log(res);
-  postList.value = res.records;
-});
-
-myAxios.post("/user/list/page/vo", {}).then((res: any) => {
-  console.log(res);
-  userList.value = res.records;
-});
-
 const route = useRoute();
 const activeKey = route.params.category;
 const initSearchParams = {
@@ -57,11 +47,6 @@ const initSearchParams = {
 };
 const searchParams = ref(initSearchParams);
 
-myAxios.post("/picture/list/page/vo", searchParams).then((res: any) => {
-  console.log(res);
-  pictureList.value = res.records;
-});
-
 watchEffect(() => {
   searchParams.value = {
     ...initSearchParams,
@@ -69,11 +54,37 @@ watchEffect(() => {
   } as any;
 });
 
+const loadData = (params: any) => {
+  const postParams = {
+    ...params,
+    searchText: params.text,
+  };
+  myAxios.post("/post/list/page/vo", postParams).then((res: any) => {
+    console.log(res);
+    postList.value = res.records;
+  });
+  const userParams = {
+    ...params,
+    userName: params.text,
+  };
+  myAxios.post("/user/list/page/vo", userParams).then((res: any) => {
+    console.log(res);
+    userList.value = res.records;
+  });
+  myAxios.post("/picture/list/page/vo", postParams).then((res: any) => {
+    console.log("picture接口返回的数据=>", res);
+    pictureList.value = res.records;
+  });
+};
+
+loadData(initSearchParams);
+
 const onSearch = (value: string) => {
-  alert(value);
+  //alert(value);
   router.push({
     query: searchParams.value,
   });
+  loadData(searchParams.value);
 };
 
 const handleTabChange = (key: string) => {
