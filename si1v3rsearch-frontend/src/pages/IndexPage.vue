@@ -81,6 +81,7 @@ loadData(initSearchParams);
 
 const onSearch = (value: string) => {
   //alert(value);
+  console.log(value);
   router.push({
     query: searchParams.value,
   });

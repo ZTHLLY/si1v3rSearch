@@ -31,7 +31,7 @@ public class PictureController {
     /**
      * 分页获取列表（封装类）
      *
-     * @param PictureSearchRequest
+     * @param pictureSearchRequest
      * @param request
      * @return
      */
