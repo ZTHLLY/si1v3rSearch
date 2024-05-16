@@ -54,7 +54,7 @@ watchEffect(() => {
   } as any;
 });
 
-const loadData = (params: any) => {
+const loadDataOld = (params: any) => {
   const postParams = {
     ...params,
     searchText: params.text,
@@ -74,6 +74,18 @@ const loadData = (params: any) => {
   myAxios.post("/picture/list/page/vo", postParams).then((res: any) => {
     console.log("picture接口返回的数据=>", res);
     pictureList.value = res.records;
+  });
+};
+const loadData = (params: any) => {
+  const postParams = {
+    ...params,
+    searchText: params.text,
+  };
+  myAxios.post("/search/all", postParams).then((res: any) => {
+    console.log(res);
+    postList.value = res.postVOList;
+    userList.value = res.userVOList;
+    pictureList.value = res.pictureList;
   });
 };
 

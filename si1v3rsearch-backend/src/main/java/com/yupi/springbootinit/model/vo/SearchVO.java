@@ -13,10 +13,12 @@ import java.util.List;
 @Data
 public class SearchVO implements Serializable {
 
+
+    //展示给前端的用户列表
     private List<UserVO> userVOList;
-
+    //帖子列表
     private List<PostVO> postVOList;
-
+    //图片列表
     private List<Picture> pictureList;
 
 
