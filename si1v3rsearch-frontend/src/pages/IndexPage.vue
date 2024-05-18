@@ -1,7 +1,7 @@
 <template>
   <div class="index-page">
     <a-input-search
-      v-model:value="searchParams.text"
+      v-model:value="searchText"
       placeholder="input search text"
       enter-button="Search"
       size="large"
@@ -44,15 +44,10 @@ const initSearchParams = {
   text: "",
   pageSize: 10,
   pageNum: 1,
+  type: "",
 };
 const searchParams = ref(initSearchParams);
-
-watchEffect(() => {
-  searchParams.value = {
-    ...initSearchParams,
-    text: route.query.text,
-  } as any;
-});
+const searchText = ref(route.params.text || "");
 
 const loadDataOld = (params: any) => {
   const postParams = {
@@ -81,23 +76,41 @@ const loadData = (params: any) => {
     ...params,
     searchText: params.text,
   };
+  console.log("postParams=>", postParams);
+  //alert(postParams.type);
   myAxios.post("/search/all", postParams).then((res: any) => {
-    console.log(res);
-    postList.value = res.postVOList;
-    userList.value = res.userVOList;
-    pictureList.value = res.pictureList;
+    //console.log(res);
+    if (postParams.type === "user") {
+      userList.value = res.userVOList;
+    } else if (postParams.type === "post") {
+      postList.value = res.postVOList;
+    } else if (postParams.type === "picture") {
+      pictureList.value = res.pictureList;
+    }
   });
 };
 
-loadData(initSearchParams);
+watchEffect(() => {
+  searchParams.value = {
+    ...initSearchParams,
+    text: route.query.text,
+    type: route.params.category,
+  } as any;
+  console.log("watchEffect searchParams.value=>", searchParams.value);
+  loadData(searchParams.value);
+});
+
+//loadData(initSearchParams);
 
 const onSearch = (value: string) => {
   //alert(value);
   console.log(value);
   router.push({
-    query: searchParams.value,
+    query: {
+      ...searchParams.value,
+      text: value,
+    },
   });
-  loadData(searchParams.value);
 };
 
 const handleTabChange = (key: string) => {
