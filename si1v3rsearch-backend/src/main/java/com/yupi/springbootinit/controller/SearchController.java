@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yupi.springbootinit.common.BaseResponse;
 import com.yupi.springbootinit.common.ErrorCode;
 import com.yupi.springbootinit.common.ResultUtils;
+import com.yupi.springbootinit.datasource.PostDataSource;
 import com.yupi.springbootinit.exception.BusinessException;
 import com.yupi.springbootinit.exception.ThrowUtils;
 import com.yupi.springbootinit.model.dto.post.PostQueryRequest;
@@ -47,6 +48,9 @@ public class SearchController {
     @Resource
     private UserService userService;
 
+    @Resource
+    private PostDataSource postDataSource;
+
     @PostMapping("/all")
     public BaseResponse<SearchVO> searchAll(@RequestBody SearchAllRequest searchAllRequest, HttpServletRequest request){
 
@@ -80,7 +84,9 @@ public class SearchController {
             //帖子搜索 这个没有并发
             PostQueryRequest postQueryRequest = new PostQueryRequest();
             postQueryRequest.setSearchText(searchText);
-            Page<PostVO> postList = postService.listPostVOByPage(postQueryRequest, request);
+            int current = searchAllRequest.getCurrent();
+            int pageSize = searchAllRequest.getPageSize();
+            Page<PostVO> postList = postDataSource.doSearch(searchText, current,pageSize);
 
 
             CompletableFuture.allOf(userTask,pictureTask).join();
