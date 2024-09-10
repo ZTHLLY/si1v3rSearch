@@ -114,8 +114,9 @@ public class SearchController {
                 case POST:
                     PostQueryRequest postQueryRequest = new PostQueryRequest();
                     postQueryRequest.setSearchText(searchText);
-                    Page<PostVO> postList = postService.listPostVOByPage(postQueryRequest, request);
-                    searchVO.setPostVOList(postList.getRecords());
+                    //Page<PostVO> postList = postService.listPostVOByPage(postQueryRequest, request);
+                    Page<PostVO> postVOPage = postDataSource.doSearch(searchText, postQueryRequest.getCurrent(), postQueryRequest.getPageSize());
+                    searchVO.setPostVOList(postVOPage.getRecords());
                     break;
                 case USER:
                     UserQueryRequest userQueryRequest = new UserQueryRequest();
