@@ -8,21 +8,21 @@ spring:
   # todo 需替换配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/my_db
-    username: root
-    password: 123456
+    url: jdbc:mysql://43.136.20.126:3306/ruimingsearch
+    username: ruiming
+    password: ruimingRoot
   # Redis 配置
   # todo 需替换配置
-  redis:
-    database: 1
-    host: localhost
-    port: 6379
-    timeout: 5000
-    password: 123456
+#  redis:
+#    database: 1
+#    host: localhost
+#    port: 6379
+#    timeout: 5000
+#    password: 123456
   # Elasticsearch 配置
   # todo 需替换配置
   elasticsearch:
-    uris: http://localhost:9200
+    uris: http://43.136.20.126:9200/
     username: root
     password: 123456
 mybatis-plus:
@@ -31,7 +31,12 @@ mybatis-plus:
     log-impl: ''
 # 接口文档配置
 knife4j:
-  basic:
-    enable: true
-    username: root
-    password: 123456
+  enable: true
+  openapi:
+    title: "接口文档"
+    version: 1.0
+    group:
+      default:
+        api-rule: package
+        api-rule-resources:
+          - com.yupi.springbootinit.controller
