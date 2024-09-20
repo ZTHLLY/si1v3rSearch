@@ -20,6 +20,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -30,6 +32,21 @@ public class crawlerTest {
 
     @Resource
     private PostService postService;
+
+    public boolean isValidImageUrl(String imageUrl) {
+        try {
+            URL url = new URL(imageUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("HEAD");  // 使用 HEAD 请求
+            connection.setConnectTimeout(5000);   // 设置超时时间
+            connection.setReadTimeout(5000);
+            int responseCode = connection.getResponseCode();
+            return (responseCode == HttpURLConnection.HTTP_OK);  // 如果状态码是200，说明链接有效
+        } catch (Exception e) {
+            return false;  // 如果出现异常，认为URL无效
+        }
+    }
+
     @Test
     void crawlImg() throws IOException {
 
@@ -45,6 +62,11 @@ public class crawlerTest {
             String m = element.select(".iusc").get(0).attr("m");
             Map<String,String> map=JSONUtil.toBean(m,Map.class);
             String murl= map.get("murl");
+
+            if(! isValidImageUrl(murl)){
+                System.out.println("there is invalid picture!");
+            }
+
             //图片标题title
             String title=element.select(".inflnk").get(0).attr("aria-label");
             Picture picture = new Picture();

@@ -22,7 +22,7 @@ spring:
   # Elasticsearch 配置
   # todo 需替换配置
   elasticsearch:
-    uris: http://43.136.20.126:9200/
+    uris: http://43.136.20.126:9200
     username: root
     password: 123456
 mybatis-plus:
