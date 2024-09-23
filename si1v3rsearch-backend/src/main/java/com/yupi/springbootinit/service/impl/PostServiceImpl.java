@@ -223,6 +223,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         List<Post> resourceList = new ArrayList<>();
 
         Map<Long, String> postIdContentHighLight = new HashMap<>();
+        Map<Long,String> postIdTitleHightLight=new HashMap<>();
         // 查出结果后，从 db 获取最新动态数据（比如点赞数）
         if (searchHits.hasSearchHits()) {
             List<SearchHit<PostEsDTO>> searchHitList = searchHits.getSearchHits();
@@ -237,6 +238,15 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                     }
                 }
 
+                //找到高亮标题
+                List<String> titlesHighlight=searchHit.getHighlightField("title");
+                if(CollectionUtils.isNotEmpty(titlesHighlight)){
+                    String titleHighlight = titlesHighlight.get(0);
+                    if(StringUtils.isNotBlank(titleHighlight)){
+                        postIdTitleHightLight.put(postId,titleHighlight);
+                    }
+                }
+
             });
             List<Long> postIdList = searchHitList.stream().map(searchHit -> searchHit.getContent().getId())
                     .collect(Collectors.toList());
@@ -248,12 +258,17 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                     if (idPostMap.containsKey(postId)) {
                         Post post = idPostMap.get(postId).get(0);
                         String contentHighlight = postIdContentHighLight.get(postId);
+                        String titleHighlight=postIdTitleHightLight.get(postId);
                         if(StringUtils.isNotBlank(contentHighlight)){
-                            post.setContent(contentHighlight);
+                            post.setContent(contentHighlight+"......");
+
+                        }
+                        if(StringUtils.isNotBlank(titleHighlight)){
+                            post.setTitle(titleHighlight);
                         }
 
 
-                        resourceList.add(idPostMap.get(postId).get(0));
+                        resourceList.add(post);
 
                         // 给结果加上highlight，内容和标题都加上
                     } else {

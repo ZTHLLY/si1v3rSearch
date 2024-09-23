@@ -5,12 +5,13 @@
       <a-list-item>
         <a-list-item-meta>
           <template #description>
-            <p v-html="item.content" style="color: black"></p>
+            <p
+              v-html="item.content"
+              style="color: black; font-weight: lighter; font-family: Cursive"
+            ></p>
           </template>
           <template #title>
-            <a href="https://www.antdv.com/" style="font-size: 16px">{{
-              item.title
-            }}</a>
+            <a v-html="item.title" style="font-size: 16px"></a>
           </template>
           <template #avatar>
             <a-avatar
