@@ -13,7 +13,7 @@
     </parent>
     <groupId>com.yupi</groupId>
     <artifactId>springboot-init</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>ruiming-search-backend</name>
     <properties>
         <java.version>1.8</java.version>
